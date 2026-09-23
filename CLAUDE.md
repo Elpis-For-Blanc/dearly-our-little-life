@@ -470,7 +470,7 @@ A conversation (`autoDialogueTrigger.ts`'s `runConversation`) is a long-running 
 
 ### Deployment (GitHub Pages)
 
-No backend by design for the initial version. Before deploying, `vite.config.ts` needs `base: '/<repo-name>/'` set to match the actual GitHub repo name (not yet set — the repo name isn't known at scaffold time).
+No backend by design for the initial version. Deployed as a GitHub Pages *project* site at `https://elpis-for-blanc.github.io/dearly-our-little-life/`, so `vite.config.ts` sets `base: '/dearly-our-little-life/'` to match the actual repo name — without it every built asset request 404s under the real subpath and the page renders blank. If the repo is ever renamed, this must be updated to match. Runtime code that builds its own asset URL (`bgm/bgmConfig.ts`'s `resolveMusicUrl`) already reads `import.meta.env.BASE_URL` rather than hardcoding `/`, so it picks this up automatically — checked project-wide (no other `/`-prefixed absolute asset path exists in `src/`, and there's no router to worry about, see "App flow is phase-based, not routed" above).
 
 ## Delivery process for this project
 
