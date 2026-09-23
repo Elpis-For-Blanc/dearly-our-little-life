@@ -1,0 +1,15 @@
+.room-lighting-overlay {
+  position: absolute;
+  inset: 0;
+  /* Never intercepts a click/drag/keyboard event meant for furniture underneath it. */
+  pointer-events: none;
+  /* A CSS-level transition is the entire "부드러운 변화" implementation — no JS interpolation loop, no extra timer.
+     Duration kept in sync with roomLightingConfig.ts's ROOM_LIGHTING_TRANSITION_MS by hand (CSS can't import a JS
+     constant) — change both together if this is ever tuned. */
+  transition:
+    background-color 900ms ease,
+    opacity 900ms ease;
+  /* Above every piece of furniture (zIndex: placement.layer, small integers) and every character token
+     (zIndex: Math.round(y), up to ~ROOM_HEIGHT) in both Room.tsx and LiveRoomView.tsx's own stacking contexts. */
+  z-index: 1000;
+}

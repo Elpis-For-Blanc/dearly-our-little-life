@@ -1,0 +1,202 @@
+/*
+ * DEARLY theme — 딸기우유 연분홍.
+ *
+ * The one place UI colors are defined. Every stylesheet reads these tokens
+ * (`var(--…)`); no component picks its own pink. Furniture/pattern colors are
+ * NOT part of this file — they belong to the furniture color system
+ * (features/home/colorPresets.ts) and are user content, not UI chrome.
+ *
+ * Contrast notes (WCAG ratios, on the surfaces they're used on):
+ *   --text on --bg 7.8:1 · --text-h on --bg 9:1 · --on-accent on --accent 6.2:1
+ *   --accent-text on --selected-bg 4.8:1 · --danger on --panel-bg 5.5:1
+ *   --text-muted on --panel-bg ~4.5:1 (secondary text only).
+ * --accent / --accent-strong are FILL and ring colors, never small text: as text
+ * they'd be ~2–3:1 on the light surfaces, so text uses --accent-text instead.
+ */
+:root {
+  color-scheme: light;
+
+  /* ---- surfaces ---- */
+  --bg: #fff8fb; /* page */
+  --bg-soft: #fdeef5; /* header, wells, tracks */
+  --panel-bg: #fffdfe; /* cards, panels, inputs */
+  --border: #e8c7d7;
+
+  /* ---- brand ---- */
+  --accent: #efa3c2; /* fills: primary buttons, active tabs, scrollbar thumb */
+  --accent-strong: #d97fa7; /* focus ring, selection outline, hovered fill, checkbox/radio */
+  --accent-text: #a3335f; /* pink text and icons on light/pink surfaces */
+  --on-accent: #4a2d3b; /* text on --accent / --accent-strong fills */
+
+  /* ---- interaction states ---- */
+  --hover-bg: #f8d9e7;
+  --selected-bg: #f6d4e3;
+  --panel-selected-bg: var(--selected-bg); /* legacy name still used across component CSS */
+  --focus-ring: rgb(217 127 167 / 35%);
+  --disabled-opacity: 0.5;
+
+  /* ---- text ---- */
+  --text: #5e4a52;
+  --text-h: #4a3540; /* headings, form values */
+  --text-muted: #8a6f79; /* hints, descriptions, secondary labels */
+
+  /* ---- status ---- */
+  --danger: #b93a63;
+  --danger-border: #e4a0b8;
+  --success: #7bb88a;
+
+  /* ---- shape & depth ---- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+  --shadow-panel: 0 2px 10px rgb(217 127 167 / 14%);
+  --shadow-bubble: 0 2px 6px rgb(120 72 96 / 25%);
+  --shadow-bar-top: 0 -2px 10px rgb(217 127 167 / 14%);
+
+  /* ---- scene effects ---- */
+  --talking-glow: rgb(255 255 255 / 85%); /* soft pure-white halo around a character while it talks */
+
+  /* ---- scrollbars ---- */
+  --scrollbar-thumb: var(--accent);
+  --scrollbar-thumb-hover: var(--accent-strong);
+  --scrollbar-track: var(--bg-soft);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+::selection {
+  background: var(--selected-bg);
+  color: var(--text-h);
+}
+
+:where(a) {
+  color: var(--accent-text);
+}
+
+/* ------------------------------------------------------------------ *
+ * Base controls. `:where()` keeps these at zero specificity, so any
+ * component stylesheet that styles a control itself always wins; they
+ * only give the not-yet-styled ones the theme's look.
+ * ------------------------------------------------------------------ */
+
+:where(button) {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--panel-bg);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+}
+
+:where(input:not([type='checkbox'], [type='radio'], [type='range'], [type='color'], [type='file']), select, textarea) {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--panel-bg);
+  color: var(--text-h);
+  font: inherit;
+}
+
+:where(textarea) {
+  line-height: 1.45;
+  resize: vertical;
+}
+
+::placeholder {
+  color: var(--text-muted);
+  opacity: 0.85;
+}
+
+/* Native checkbox / radio / range / progress take the brand color. */
+:where(input[type='checkbox'], input[type='radio'], input[type='range'], progress) {
+  accent-color: var(--accent-strong);
+}
+
+/* ------------------------------------------------------------------ *
+ * Interaction states (hover / pressed / focus / disabled). These sit at
+ * higher specificity on purpose so they apply to component-styled
+ * controls too. A button that is already showing a selected state
+ * (.active, aria-pressed, *-active, *-selected) or is a color swatch is
+ * excluded from the hover/press fill so it never "un-selects" visually.
+ * A filled primary button opts into a different hover fill by setting
+ * --btn-hover / --btn-active on itself.
+ * ------------------------------------------------------------------ */
+
+button:not(:disabled, .active, [aria-pressed='true'], [class*='-active'], [class*='-selected'], [class*='swatch']):hover {
+  background-color: var(--btn-hover, var(--hover-bg));
+  border-color: var(--accent);
+}
+
+button:not(:disabled, .active, [aria-pressed='true'], [class*='-active'], [class*='-selected'], [class*='swatch']):active {
+  background-color: var(--btn-active, var(--selected-bg));
+  transform: translateY(1px);
+}
+
+/* Swatches keep their own fill (set inline) and just lift slightly. */
+button[class*='swatch']:not(:disabled):hover {
+  transform: scale(1.12);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+:is(input, select, textarea):focus:not(:disabled) {
+  border-color: var(--accent-strong);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+:is(button, input, select, textarea):disabled {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+}
+
+button:disabled {
+  background: var(--bg-soft);
+  color: var(--text-muted);
+  border-color: var(--border);
+  transform: none;
+}
+
+/* ------------------------------------------------------------------ *
+ * Scrollbars (Firefox/Chromium standard properties + WebKit fallback).
+ * ------------------------------------------------------------------ */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border: 2px solid var(--scrollbar-track);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(button) {
+    transition: none;
+  }
+}

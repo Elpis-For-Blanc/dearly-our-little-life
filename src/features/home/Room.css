@@ -1,0 +1,58 @@
+.room {
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.room-wall {
+  position: absolute;
+  inset: 0;
+}
+
+.room-wall-svg,
+.room-floor-svg {
+  display: block;
+}
+
+.room-corner-shade {
+  position: absolute;
+  top: 0;
+  width: 45%;
+  height: 55%;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.room-corner-shade-left {
+  left: 0;
+  background: radial-gradient(ellipse at top left, rgba(76, 58, 46, 0.1), transparent 70%);
+}
+
+.room-corner-shade-right {
+  right: 0;
+  background: radial-gradient(ellipse at top right, rgba(76, 58, 46, 0.08), transparent 70%);
+}
+
+.room-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--floor-height);
+}
+
+.room-baseboard {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--floor-height);
+  height: 4px;
+  background: rgba(150, 120, 90, 0.35);
+}
+
+.room-surface {
+  position: absolute;
+  inset: 0;
+}

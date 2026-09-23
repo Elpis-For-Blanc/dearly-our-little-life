@@ -1,0 +1,131 @@
+/*
+ * width/height: 100% here isn't visual sizing (nothing is drawn on this
+ * element itself) — it exists so this becomes a definite-size containing
+ * block for its children's percentage height/width below. Without it, a
+ * child's `height: N%` would have nothing valid to resolve against (this
+ * element's own size would otherwise be "auto", i.e. sized by content,
+ * which is circular) and silently compute as if unset. `left`/`top` still
+ * place this element's origin at the character's exact foot point; the
+ * oversized box extending past the room doesn't matter since nothing here
+ * paints or captures pointer events beyond that origin.
+ */
+.character-token {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transition: left 0.2s linear, top 0.2s linear;
+}
+
+/* Anchored at the character's own foot point (this element's top-left IS that point) — every child below offsets itself from here with its own transform, so image/shadow/name/bubble can never drift apart from one another. */
+.character-token-shadow,
+.character-token-sprite,
+.character-token-placeholder,
+.character-token-name,
+.character-token-bubble {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.character-token-shadow {
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background: radial-gradient(ellipse, rgba(120, 96, 74, 0.28), rgba(120, 96, 74, 0) 75%);
+}
+
+/* Bottom-center of the sprite sits exactly on the foot point; height comes from characterRenderConfig.ts, width is auto so the image's own aspect ratio is preserved — no crop, no circular mask. */
+.character-token-sprite {
+  transform: translate(-50%, -100%);
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+  image-rendering: auto;
+  filter: drop-shadow(0 2px 3px rgba(76, 58, 46, 0.3));
+}
+
+.character-token-talking .character-token-sprite {
+  filter: drop-shadow(0 0 8px var(--talking-glow)) drop-shadow(0 2px 3px rgba(76, 58, 46, 0.3));
+}
+
+.character-token-placeholder {
+  transform: translate(-50%, -100%);
+  aspect-ratio: 3 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--panel-selected-bg);
+  color: var(--accent-text);
+  font-weight: 700;
+  font-size: 1.4em;
+}
+
+.character-token-name {
+  transform: translate(-50%, 6px);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--panel-bg) 88%, transparent);
+  color: var(--text-h);
+  white-space: nowrap;
+}
+
+/* Bottom edge sits at the sprite's own top edge (computed in CharacterToken.tsx from the same height/footOffset the sprite uses), extending further up from there — "이미지 상단을 기준으로 배치". */
+.character-token-bubble {
+  transform: translate(-50%, -100%);
+  margin-top: -6px;
+  max-width: 140px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  color: var(--text-h);
+  font-size: 11px;
+  line-height: 1.3;
+  text-align: center;
+  white-space: normal;
+  box-shadow: var(--shadow-bubble);
+}
+
+/* Monologue = a lighter, dashed "thought" bubble with two small trailing dots, so it never reads as a spoken line. Fades in and out over MONOLOGUE_DISPLAY_MS (duration set inline from the same constant); the tick removes it from the store at expiry. */
+.character-token-monologue {
+  background: color-mix(in srgb, var(--bg-soft) 82%, transparent);
+  border: 1px dashed var(--accent-strong);
+  color: var(--text);
+  font-style: italic;
+  box-shadow: none;
+  opacity: 0;
+  animation-name: monologue-fade;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.character-token-monologue::before,
+.character-token-monologue::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--bg-soft) 82%, transparent);
+  border: 1px dashed var(--accent-strong);
+}
+
+.character-token-monologue::before {
+  bottom: -8px;
+  width: 6px;
+  height: 6px;
+}
+
+.character-token-monologue::after {
+  bottom: -14px;
+  width: 3px;
+  height: 3px;
+}
+
+@keyframes monologue-fade {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
+}

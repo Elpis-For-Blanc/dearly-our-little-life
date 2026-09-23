@@ -1,0 +1,17 @@
+/*
+ * Deliberately minimal — this panel reuses `LiveScreen.css`'s existing
+ * `.live-frequency-panel`/`.live-frequency-header`/`.live-pause-toggle`/
+ * `.live-frequency-description`/`.live-manual-dialogue`/
+ * `.live-manual-talk-button`/`.live-manual-message` classes by name rather
+ * than redefining them, mirroring how the existing "자동 가구 사용" toggle
+ * already reuses that same styling with no new CSS of its own. Only the two
+ * small layout tweaks below are genuinely new to this component.
+ */
+
+.character-interaction-panel {
+  margin-top: 10px;
+}
+
+.character-interaction-actions {
+  flex-wrap: wrap;
+}

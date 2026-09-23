@@ -1,0 +1,190 @@
+.personality-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel-bg);
+}
+
+.personality-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.personality-picker-count {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.personality-selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.personality-selected-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px 3px 12px;
+  border-radius: 999px;
+  background: var(--panel-selected-bg);
+  color: var(--accent-text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.personality-selected-pill button {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.personality-limit-notice {
+  margin: 0;
+  font-size: 11px;
+  color: var(--accent-text);
+}
+
+.personality-picker-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.personality-search-input {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 12px;
+  background: transparent;
+  color: var(--text-h);
+}
+
+.personality-category-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.personality-category-chip {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font: inherit;
+  font-size: 11px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.personality-category-chip.active {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: transparent;
+}
+
+.personality-tag-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 4px 2px;
+}
+
+.personality-empty {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.personality-tag {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font: inherit;
+  font-size: 12px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.personality-tag.active {
+  background: var(--panel-selected-bg);
+  color: var(--accent-text);
+  border-color: var(--accent);
+}
+
+.personality-tag:disabled {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+}
+
+.personality-custom-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+
+.personality-custom-form input[type='text'] {
+  flex: 1 1 140px;
+  min-width: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 12px;
+  background: transparent;
+  color: var(--text-h);
+}
+
+.personality-custom-form select {
+  flex: 1 1 140px;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 12px;
+  background: transparent;
+  color: var(--text-h);
+}
+
+.personality-custom-form button {
+  border: none;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font: inherit;
+  font-size: 12px;
+  background: var(--accent);
+  color: var(--on-accent);
+  cursor: pointer;
+}
+
+.personality-custom-form button:disabled {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .personality-custom-form input[type='text'],
+  .personality-custom-form select,
+  .personality-custom-form button {
+    flex-basis: 100%;
+  }
+}

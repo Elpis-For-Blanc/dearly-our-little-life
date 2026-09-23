@@ -1,0 +1,56 @@
+.live-room {
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.live-room-wall {
+  position: absolute;
+  inset: 0;
+}
+
+.live-room-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--floor-height);
+}
+
+.live-room-baseboard {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--floor-height);
+  height: 4px;
+  background: rgba(150, 120, 90, 0.35);
+}
+
+.live-room-surface {
+  position: absolute;
+  inset: 0;
+}
+
+.live-room-furniture {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Only a piece with a usable interaction slot (currently: sittable furniture) opts back into pointer/keyboard interaction — everything else stays purely decorative, exactly as before. */
+.live-room-furniture-usable {
+  pointer-events: auto;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.live-room-furniture-usable:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.live-room-furniture-selected {
+  box-shadow: 0 0 0 3px var(--accent) inset;
+  border-radius: 10px;
+}

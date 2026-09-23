@@ -1,0 +1,77 @@
+.furniture-usage-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel-bg);
+  box-shadow: var(--shadow-panel);
+  font-size: 12px;
+}
+
+.furniture-usage-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.furniture-usage-panel-close {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.furniture-usage-panel-picker,
+.furniture-usage-panel-seat {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.furniture-usage-panel-picker {
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.furniture-usage-panel-seat-label {
+  font-weight: 600;
+  color: var(--text-h);
+  min-width: 64px;
+}
+
+.furniture-usage-panel-picker select {
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  background: transparent;
+  color: var(--text-h);
+}
+
+.furniture-usage-panel-seat button {
+  border: none;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  background: var(--accent);
+  color: var(--on-accent);
+  --btn-hover: var(--accent-strong);
+  --btn-active: var(--accent-strong);
+}
+
+.furniture-usage-panel-reason {
+  margin: 0;
+  flex-basis: 100%;
+  font-size: 11px;
+  color: var(--text-muted);
+}

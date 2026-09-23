@@ -1,0 +1,272 @@
+.live-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 640px;
+  text-align: left;
+}
+
+.live-screen-guard {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.live-frequency-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--panel-bg);
+  box-shadow: var(--shadow-panel);
+}
+
+.live-frequency-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.live-frequency-current {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.live-pause-toggle {
+  margin-left: auto;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font: inherit;
+  font-size: 12px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.live-frequency-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.live-frequency-option {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font: inherit;
+  font-size: 12px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.live-frequency-option.active {
+  background: var(--panel-selected-bg);
+  color: var(--accent-text);
+  border-color: transparent;
+}
+
+.live-frequency-description {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.room-lighting-intensity-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+.room-lighting-intensity-field input[type='range'] {
+  width: 100%;
+}
+
+.room-lighting-preview-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.room-lighting-preview-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.room-lighting-preview-swatch-box {
+  display: block;
+  width: 34px;
+  height: 24px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background-color: #f3e4cf;
+}
+
+.room-lighting-preview-swatch-label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.live-relationship-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.live-relationship-row select {
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  background: transparent;
+  color: var(--text-h);
+}
+
+.live-manual-dialogue {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.live-manual-dialogue select {
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 12px;
+  background: transparent;
+  color: var(--text-h);
+}
+
+.live-manual-talk-button {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 20px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  background: var(--accent);
+  color: var(--on-accent);
+  --btn-hover: var(--accent-strong);
+  --btn-active: var(--accent-strong);
+}
+
+.live-manual-talk-button:disabled {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+}
+
+.live-manual-message {
+  margin: 0;
+  flex-basis: 100%;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.live-situation {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--panel-bg);
+}
+
+.live-situation-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.live-situation-field input {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  background: transparent;
+  color: var(--text-h);
+}
+
+.dialogue-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dialogue-feed-empty {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.dialogue-bubble {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 80%;
+}
+
+.dialogue-bubble-a {
+  align-self: flex-start;
+}
+
+.dialogue-bubble-b {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.dialogue-bubble-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.dialogue-bubble-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dialogue-bubble-name {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.dialogue-bubble-b .dialogue-bubble-content {
+  align-items: flex-end;
+}
+
+.dialogue-bubble-text {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: var(--panel-selected-bg);
+  color: var(--text-h);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.dialogue-bubble-b .dialogue-bubble-text {
+  background: var(--bg);
+  border: 1px solid var(--border);
+}

@@ -1,0 +1,176 @@
+.room-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.room-tabs-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.room-tab {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.room-tab-active {
+  border-color: var(--accent);
+  background: var(--panel-selected-bg);
+}
+
+.room-tab-select {
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  padding: 7px 6px 7px 14px;
+  color: var(--text-h);
+  cursor: pointer;
+}
+
+.room-tab-active .room-tab-select {
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.room-tab-delete {
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  padding: 6px 10px 6px 2px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.room-tab-delete:hover {
+  color: var(--danger);
+}
+
+.room-tab-rename-input {
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  padding: 7px 10px;
+  color: var(--text-h);
+  min-width: 60px;
+}
+
+.room-tab-add {
+  border: 1px dashed var(--border);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font: inherit;
+  font-size: 13px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.room-tab-add:disabled {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+}
+
+.room-tab-add-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel-bg);
+}
+
+.room-tab-add-form select,
+.room-tab-add-form input {
+  font: inherit;
+  font-size: 12px;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+}
+
+.room-tab-add-form button {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font: inherit;
+  font-size: 12px;
+  background: var(--panel-selected-bg);
+  color: var(--accent-text);
+  cursor: pointer;
+}
+
+.room-tab-delete-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--danger-border);
+  border-radius: 14px;
+  background: var(--panel-bg);
+  font-size: 12px;
+}
+
+.room-tab-delete-reassign {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.room-tab-delete-reassign select {
+  font: inherit;
+  font-size: 12px;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+}
+
+.room-tab-delete-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.room-tab-delete-actions button:first-child {
+  border: 1px solid var(--danger-border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 12px;
+  background: transparent;
+  color: var(--danger);
+  cursor: pointer;
+}
+
+.room-tab-delete-actions button:first-child:disabled {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+}
+
+.room-tab-delete-actions button:last-child {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 12px;
+  background: var(--bg);
+  color: var(--text-h);
+  cursor: pointer;
+}

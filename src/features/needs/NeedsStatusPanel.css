@@ -1,0 +1,49 @@
+.needs-status-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.needs-status-title {
+  margin: 0 0 2px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.needs-status-gauge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.needs-status-gauge-label {
+  flex: 0 0 40px;
+  color: var(--text);
+}
+
+.needs-status-gauge-track {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.needs-status-gauge-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.needs-status-mood {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--text-h);
+}

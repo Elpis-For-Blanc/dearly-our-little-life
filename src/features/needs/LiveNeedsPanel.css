@@ -1,0 +1,84 @@
+.live-needs-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.live-needs-card {
+  flex: 1 1 180px;
+  max-width: 240px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel-bg);
+}
+
+.live-needs-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.live-needs-card-name {
+  color: var(--text-h);
+}
+
+.live-needs-card-mood {
+  color: var(--text-muted);
+}
+
+.live-needs-card-interaction {
+  margin: -2px 0 6px;
+  font-size: 11px;
+  color: var(--accent-text);
+}
+
+.live-needs-gauges {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.live-needs-gauge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.live-needs-gauge-label {
+  flex: 0 0 32px;
+  color: var(--text-muted);
+}
+
+.live-needs-gauge-track {
+  flex: 1;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--bg-soft);
+  overflow: hidden;
+}
+
+.live-needs-gauge-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+/* A critically low need is nudged toward the stronger (still pastel) accent tone and a slightly bolder label —
+   deliberately not red/warning-colored, per the spec's own "강한 빨강이나 경고 UI는 피할 것". Never color-alone: the
+   label text and the title/aria-label already carry the same information regardless of color. */
+.live-needs-gauge-low .live-needs-gauge-fill {
+  background: var(--accent-strong);
+}
+
+.live-needs-gauge-low .live-needs-gauge-label {
+  color: var(--text-h);
+  font-weight: 600;
+}

@@ -1,0 +1,101 @@
+.bgm-player {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--border);
+  background: var(--panel-bg);
+  box-shadow: var(--shadow-bar-top);
+  font-size: 12px;
+}
+
+.bgm-player-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1 1 160px;
+}
+
+.bgm-player-band {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--panel-selected-bg);
+  color: var(--accent-text);
+  font-size: 11px;
+}
+
+.bgm-player-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-h);
+}
+
+.bgm-player-error {
+  flex-shrink: 0;
+  color: var(--danger);
+  font-size: 11px;
+}
+
+.bgm-player-controls,
+.bgm-player-volume,
+.bgm-player-toggles {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.bgm-player button {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+  line-height: 1;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.bgm-player button:disabled {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+}
+
+.bgm-player-play {
+  padding: 6px 12px;
+  background: var(--panel-selected-bg);
+  color: var(--accent-text);
+  border-color: transparent;
+}
+
+.bgm-player-toggle.active {
+  background: var(--panel-selected-bg);
+  color: var(--accent-text);
+  border-color: transparent;
+}
+
+.bgm-player-volume input[type='range'] {
+  width: 80px;
+}
+
+@media (max-width: 640px) {
+  .bgm-player {
+    justify-content: center;
+  }
+
+  .bgm-player-info {
+    flex-basis: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}

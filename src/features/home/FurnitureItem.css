@@ -1,0 +1,33 @@
+/*
+ * No CSS drop-shadow here on purpose — each illustration draws its own
+ * ground-contact + ambient shadow inside its SVG (see palette.ts's
+ * shadowContact/shadowAmbient), positioned against that furniture's actual
+ * legs/frame/base geometry. A CSS filter here would stack a second,
+ * uncoordinated shadow on top of that and was the reason furniture used to
+ * look like it floated. Keep shadows SVG-internal, not here.
+ */
+.furniture-item {
+  position: absolute;
+  cursor: grab;
+  touch-action: none;
+  border-radius: 14px;
+  transition: box-shadow 0.15s ease;
+}
+
+.furniture-item:active {
+  cursor: grabbing;
+}
+
+/* The theme's strong pink ring, independent of the room's own wallpaper/floor colors, so selection always reads clearly. */
+.furniture-item-selected {
+  box-shadow:
+    0 0 0 3px var(--accent-strong),
+    0 3px 8px var(--focus-ring);
+}
+
+.furniture-item svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}

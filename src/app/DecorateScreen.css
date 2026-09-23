@@ -1,0 +1,560 @@
+.decorate-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 1320px;
+  text-align: left;
+}
+
+/* ---- status bar ---- */
+
+.decorate-status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--panel-bg);
+}
+
+.decorate-status-room {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.decorate-status-room-name {
+  font-weight: 600;
+  color: var(--text-h);
+  font-size: 14px;
+}
+
+.decorate-status-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.decorate-status-saved::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--success);
+  margin-right: 5px;
+}
+
+/* ---- workspace: catalog | room | properties ---- */
+
+.decorate-workspace {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.decorate-panel {
+  width: 220px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--panel-bg);
+  box-shadow: var(--shadow-panel);
+}
+
+/* The catalog can grow taller than the room (more categories/items later) — scroll it instead of pushing the page layout around. */
+.decorate-panel-catalog {
+  max-height: 560px;
+  overflow-y: auto;
+}
+
+.decorate-panel-properties {
+  max-height: 560px;
+  overflow-y: auto;
+}
+
+/* min() keeps the room from forcing a horizontal scroll on screens narrower than 320px + the page gutters. */
+.room {
+  flex: 1 1 640px;
+  min-width: min(320px, 100%);
+}
+
+/* ---- left panel tabs: 가구 / 벽지 / 바닥 ---- */
+
+.decorate-left-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.decorate-left-tabs button {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 0;
+  font: inherit;
+  font-size: 12px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.decorate-left-tabs button.active {
+  background: var(--panel-selected-bg);
+  color: var(--accent-text);
+  border-color: transparent;
+}
+
+/* ---- wallpaper / floor editors ---- */
+
+.surface-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.surface-editor h3 {
+  font-size: 12px;
+  margin: 8px 0 2px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.surface-editor h3:first-child {
+  margin-top: 0;
+}
+
+.surface-editor-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.surface-editor-field input[type='range'] {
+  width: 100%;
+}
+
+.color-swatch-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.color-swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+}
+
+.color-swatch {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  padding: 0;
+}
+
+.color-swatch-selected {
+  box-shadow: 0 0 0 2px var(--accent-strong);
+}
+
+/* Furniture palette sections (밝은 색상 / 회색·검정 / 빨강·와인 / 기타 진한 색상). */
+.color-swatch-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.color-swatch-group-label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.color-swatch-custom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  gap: 8px;
+}
+
+.color-swatch-custom input[type='color'] {
+  width: 32px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.pattern-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  cursor: pointer;
+}
+
+.pattern-swatch svg {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.pattern-swatch span {
+  font-size: 9px;
+  color: var(--text);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.pattern-swatch-selected {
+  border-color: var(--accent);
+  background: var(--panel-selected-bg);
+}
+
+/* ---- furniture catalog (left) ---- */
+
+.furniture-catalog {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.furniture-catalog-group h3 {
+  font-size: 12px;
+  margin: 0 0 8px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.furniture-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.furniture-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg);
+  text-align: center;
+}
+
+.furniture-card-preview {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.furniture-card-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.4;
+  background: var(--accent);
+  color: var(--on-accent);
+  pointer-events: none;
+}
+
+.furniture-card-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.furniture-card-type {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.furniture-card button {
+  width: 100%;
+  margin-top: 2px;
+  border: none;
+  border-radius: 999px;
+  padding: 5px 0;
+  font-size: 12px;
+  font: inherit;
+  cursor: pointer;
+  background: var(--panel-selected-bg);
+  color: var(--accent-text);
+}
+
+/* ---- furniture properties (right) ---- */
+
+.furniture-properties {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.furniture-properties-empty {
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.furniture-properties-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.furniture-properties-header h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.furniture-properties-preview {
+  width: 64px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.furniture-properties-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.furniture-properties-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+.furniture-properties-field input[type='number'] {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  background: transparent;
+  color: var(--text-h);
+  width: 100%;
+}
+
+.furniture-properties-field input[type='range'] {
+  width: 100%;
+}
+
+.furniture-properties-toggle {
+  align-self: flex-start;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font: inherit;
+  font-size: 12px;
+  background: var(--bg);
+  color: var(--text-h);
+  cursor: pointer;
+}
+
+/* Per-part color / pattern controls. The panel around them already scrolls (overflow-y: auto), so a long list never covers the room preview. */
+.furniture-style-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.furniture-style-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.furniture-style-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: transparent;
+  color: var(--text-h);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.furniture-style-tab-active {
+  border-color: var(--accent-strong);
+  background: var(--panel-selected-bg);
+}
+
+.furniture-style-chip {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+.furniture-style-subtitle {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.furniture-style-editor select {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  background: transparent;
+  color: var(--text-h);
+}
+
+.furniture-properties-swatches {
+  display: flex;
+  gap: 8px;
+}
+
+.swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  padding: 0;
+}
+
+.swatch-selected {
+  box-shadow: 0 0 0 2px var(--accent-strong);
+}
+
+.furniture-properties-layer-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.furniture-properties-layer-buttons button {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 0;
+  font: inherit;
+  font-size: 12px;
+  background: var(--bg);
+  color: var(--text-h);
+  cursor: pointer;
+}
+
+.furniture-properties-delete {
+  margin-top: 4px;
+  border: 1px solid var(--danger-border);
+  border-radius: 999px;
+  padding: 7px 0;
+  font: inherit;
+  font-size: 12px;
+  background: transparent;
+  color: var(--danger);
+  cursor: pointer;
+}
+
+/* ---- bottom toolbar ---- */
+
+.decorate-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--panel-bg);
+}
+
+.decorate-toolbar button {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 7px 16px;
+  font: inherit;
+  font-size: 13px;
+  background: var(--bg);
+  color: var(--text-h);
+  cursor: pointer;
+}
+
+.decorate-toolbar button:disabled {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+}
+
+.decorate-toolbar-danger {
+  color: var(--danger);
+  border-color: var(--danger-border);
+}
+
+.decorate-toolbar .decorate-status-saved {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ---- responsive ---- */
+
+@media (max-width: 900px) {
+  .decorate-workspace {
+    flex-direction: column;
+  }
+
+  .decorate-panel {
+    width: 100%;
+  }
+
+  .furniture-catalog-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .furniture-catalog-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

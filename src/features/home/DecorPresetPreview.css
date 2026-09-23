@@ -1,0 +1,57 @@
+.decor-preset-preview {
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.decor-preset-preview-wall {
+  position: absolute;
+  inset: 0;
+}
+
+.decor-preset-preview-corner-shade {
+  position: absolute;
+  top: 0;
+  width: 45%;
+  height: 55%;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.decor-preset-preview-corner-shade-left {
+  left: 0;
+  background: radial-gradient(ellipse at top left, rgba(76, 58, 46, 0.1), transparent 70%);
+}
+
+.decor-preset-preview-corner-shade-right {
+  right: 0;
+  background: radial-gradient(ellipse at top right, rgba(76, 58, 46, 0.08), transparent 70%);
+}
+
+.decor-preset-preview-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--floor-height);
+}
+
+.decor-preset-preview-baseboard {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--floor-height);
+  height: 4px;
+  background: rgba(150, 120, 90, 0.35);
+}
+
+.decor-preset-preview-surface {
+  position: absolute;
+  inset: 0;
+}
+
+.decor-preset-preview-item {
+  position: absolute;
+}
