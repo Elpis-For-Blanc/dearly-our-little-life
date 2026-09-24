@@ -180,6 +180,16 @@
   cursor: pointer;
 }
 
+/* Forces 내보내기/가져오기 onto their own row under 저장/불러오기 (the row itself still wraps naturally on narrow screens). */
+.setup-screen-data-break {
+  flex-basis: 100%;
+  height: 0;
+}
+
+.setup-screen-data-file-input {
+  display: none;
+}
+
 .save-load-status {
   font-size: 12px;
 }

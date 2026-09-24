@@ -125,7 +125,8 @@ function usableEntries<T>(raw: unknown, requiredStrings: string[]): T[] {
 }
 
 const usablePlacements = (raw: unknown) => usableEntries<Partial<FurniturePlacement> & { id: string; furnitureId: string }>(raw, ['id', 'furnitureId'])
-const usableRooms = (raw: unknown) => usableEntries<Partial<Room> & { id: string }>(raw, ['id'])
+/** Exported (add-only) so the backup importer (`features/save/saveImport.ts`) can ask the exact same "is anything in this list actually a usable room" question the restore itself asks, instead of re-implementing it. */
+export const usableRooms = (raw: unknown) => usableEntries<Partial<Room> & { id: string }>(raw, ['id'])
 
 /** Fills in fields introduced after a layout may have already been saved, and replaces a malformed number/string with its default instead of letting it poison layout math. */
 function normalizePlacement(placement: Partial<FurniturePlacement> & { id: string; furnitureId: string }): FurniturePlacement {
