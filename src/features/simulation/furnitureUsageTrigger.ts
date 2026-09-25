@@ -66,9 +66,8 @@ function startUsingSlot(characterId: string, placementId: string, kind: Interact
   const { roomId, placement } = found
 
   const definition = getFurnitureDefinition(placement.furnitureId)
-  // 'lie' is capped to the single usable slot this phase offers (see getUsableLieSlots's own doc comment) — a bed's
-  // real second slot exists in the data but is never reachable through here, so two characters can never both end
-  // up lying on the same bed regardless of how many pillows it actually draws.
+  // 'lie' goes through getUsableLieSlots (every bed's two slots, capped at MAX_LIE_OCCUPANTS) so this, the panel and
+  // the automatic pass always agree on which slots exist.
   const slotsOfKind = kind === 'lie' ? getUsableLieSlots(definition) : (definition?.interactionSlots.filter((s) => s.kind === kind) ?? [])
   if (!definition || slotsOfKind.length === 0) return 'not_sittable'
 
@@ -107,14 +106,14 @@ export function startSitting(characterId: string, placementId: string, slotId?: 
 }
 
 /**
- * Lie down on a bed. No `slotId` parameter is exposed at all — every bed
- * definition offers exactly one usable 'lie' slot this phase (see
- * furnitureCatalog.ts's `bedLieSlot`), so there is never a real choice to
- * make; "이번에는 한 캐릭터가 눕는 기능만 구현" is satisfied structurally,
- * not by an extra runtime check.
+ * Lie down on a bed. Every bed has two independent lie slots
+ * (furnitureCatalog.ts's `bedLieSlots`): omit `slotId` to take the first
+ * free one (`'occupied'` once both are taken — a third character is refused),
+ * or pass one to target a specific side (the panel's per-side "눕기" buttons,
+ * and the automatic pass, which has already chosen a free slot).
  */
-export function startLyingDown(characterId: string, placementId: string): SitOutcome {
-  return startUsingSlot(characterId, placementId, 'lie', undefined)
+export function startLyingDown(characterId: string, placementId: string, slotId?: string): SitOutcome {
+  return startUsingSlot(characterId, placementId, 'lie', slotId)
 }
 
 /** Walk up to and linger at a table's north/south spot. */

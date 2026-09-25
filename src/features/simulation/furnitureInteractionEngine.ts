@@ -27,7 +27,7 @@ export function isSittableFurniture(furnitureId: string): boolean {
   return getPrimarySitSlot(getFurnitureDefinition(furnitureId)) !== undefined
 }
 
-/** Every 'lie' slot a definition declares — a bed's one usable sleeping spot this phase (see furnitureCatalog.ts's `bedLieSlot`/the original `bed` entry — its two slots are real data, kept for a later multi-occupant phase, but only the first is ever offered here). */
+/** Every 'lie' slot a definition declares, in catalog order. `bed` and `bed-double` have two; `bed-single` and `canopy-bed` intentionally have one. */
 export function getLieSlots(definition: FurnitureDefinition | undefined): FurnitureInteractionSlot[] {
   return definition?.interactionSlots.filter((slot) => slot.kind === 'lie') ?? []
 }
@@ -36,21 +36,24 @@ export function getPrimaryLieSlot(definition: FurnitureDefinition | undefined): 
   return getLieSlots(definition)[0]
 }
 
+/** A lieable furniture piece may expose at most two usable slots; single-occupant beds simply declare one. */
+export const MAX_LIE_OCCUPANTS = 2
+
 /**
- * The lie slot(s) actually offered to a character/the UI this phase — always
- * at most **one**, even for the original `bed` entry's real two slots
- * (`bed-left`/`bed-right`, one per pillow). This is the one place "이번에는
- * 한 캐릭터가 눕는 기능만 구현하고, 두 명이 함께 눕는 기능은 추가하지 마" is
- * actually enforced: the real two-slot data is preserved untouched in the
- * catalog (and in `getLieSlots`, for a later multi-occupant phase to use),
- * but both `furnitureUsageTrigger.ts`'s `startLyingDown` and
- * `FurnitureUsagePanel.tsx` go through this function instead, so a bed can
- * never have two simultaneous occupants regardless of how many pillows its
- * illustration actually draws.
+ * The lie slots actually offered to a character/the UI/the automatic
+ * furniture-use pass: every real lie slot of the piece, up to
+ * `MAX_LIE_OCCUPANTS` (2). Each is reserved, occupied and released
+ * independently by `furnitureUsageStore.ts` (one character can hold only one
+ * slot at a time), so a second character can lie down while the first is
+ * already in the bed, and a third is refused once both slots are taken —
+ * nothing here (or anywhere) treats "a bed is in use" as a property of the
+ * whole piece. This used to return only the first slot (a deliberate,
+ * single-occupant phase); `furnitureUsageTrigger.ts`'s `startLyingDown`,
+ * `FurnitureUsagePanel.tsx` and `autoFurnitureUseEngine.ts` all read through
+ * this one function, so they all changed together.
  */
 export function getUsableLieSlots(definition: FurnitureDefinition | undefined): FurnitureInteractionSlot[] {
-  const primary = getPrimaryLieSlot(definition)
-  return primary ? [primary] : []
+  return getLieSlots(definition).slice(0, MAX_LIE_OCCUPANTS)
 }
 
 /** Whether a furniture id currently has at least one usable 'lie' slot — a bed. */

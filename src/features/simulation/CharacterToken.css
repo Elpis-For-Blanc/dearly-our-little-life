@@ -22,7 +22,8 @@
 .character-token-sprite,
 .character-token-placeholder,
 .character-token-name,
-.character-token-bubble {
+.character-token-bubble,
+.character-token-meal {
   position: absolute;
   left: 0;
   top: 0;
@@ -128,4 +129,37 @@
   10% { opacity: 1; }
   75% { opacity: 1; }
   100% { opacity: 0; }
+}
+
+.character-token-meal {
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(76, 58, 46, 0.22));
+}
+
+/* A tiny plate makes the food read as something resting on the tabletop rather
+ * than an emoji floating in the character's hand. */
+.character-token-meal-plate {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: 27px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(255, 252, 247, 0.94);
+  border: 1px solid rgba(151, 126, 105, 0.34);
+  box-shadow: inset 0 -2px 0 rgba(151, 126, 105, 0.08);
+}
+
+.character-token-meal-food {
+  position: relative;
+  z-index: 1;
+  transform: translateY(-2px);
+  font-size: 17px;
 }

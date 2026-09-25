@@ -82,3 +82,68 @@
   color: var(--text-h);
   font-weight: 600;
 }
+
+.live-needs-card-meal {
+  margin: -2px 0 6px;
+  font-size: 11px;
+  color: var(--accent-text);
+}
+
+.live-needs-meal-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 7px;
+}
+
+.live-needs-meal-actions button {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 9px;
+  background: var(--bg-soft);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.live-needs-meal-actions button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.live-needs-meal-actions span {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+
+.live-needs-shared-meals {
+  flex: 1 1 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.live-needs-shared-meals button {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 10px;
+  background: var(--bg-soft);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.live-needs-shared-meals button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.live-needs-shared-meals span {
+  font-size: 10px;
+  color: var(--text-muted);
+}

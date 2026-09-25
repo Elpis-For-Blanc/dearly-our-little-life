@@ -129,20 +129,43 @@ function chairSeat(offsetY: number): FurnitureInteractionSlot[] {
 }
 
 /**
- * A single centered lie-down slot for a bed — this phase deliberately
- * exposes only one usable sleeping spot per bed regardless of how many
- * pillows are actually drawn (bed-double draws two, side by side, same as
- * the original `bed` entry's own two `interactionSlots` — see CLAUDE.md's
- * "Furniture interaction" phase 3 section for why two-person lying is out
- * of scope this round). offsetX is 0 — the midpoint between BedBody's
- * pillow(s), which for a single centered pillow *is* its own center too, so
- * this works identically for `bed-single`'s one pillow and `bed-double`'s
- * two. offsetY is BedBody's pillow block's own vertical center (y=0.31h,
- * height=0.17h → center 0.395h) minus the piece's own local origin (0.5h)
- * = -0.105h, read directly off that shared illustration body — never guessed.
+ * The two independent lie-down slots of a bed — one per sleeper, so two
+ * characters can share the same bed (see `furnitureUsageStore.ts`: every slot
+ * is reserved/occupied/released on its own, and one character can hold only
+ * one slot at a time). The first keeps the id `'lie'` this helper's
+ * single-slot predecessor already used (`bed-single`/`bed-double`/`canopy-bed`
+ * always exposed exactly `'lie'`), so any place that already refers to it
+ * keeps working; the second is `'lie-right'`. The original `bed` entry never
+ * used this helper — it has always had its own two slots (`bed-left`/
+ * `bed-right`), unchanged.
+ *
+ * Positions are derived from each illustration's *real mattress rect*, in
+ * fractions of the piece's own width/height (local geometry, never screen
+ * coordinates), and re-verified against the actual rendered SVG by
+ * `bedLieSlots.test.tsx`:
+ *  - `xFraction` — how far left/right of the piece's center each sleeper sits,
+ *    as a fraction of `width`. Chosen so the two are far enough apart not to
+ *    overlap (>= one character footprint even at the piece's minimum scale),
+ *    and both sit well inside the mattress, clear of the frame and the posts.
+ *  - `yFraction` — the mattress's own vertical center, as a fraction of
+ *    `height`: on the mattress, just below the pillow row (never on the
+ *    pillows, never on the frame or above the mattress's top edge, which is
+ *    where the old single centered slot — the pillow-row center — actually was).
+ * `facing` is `-π/2` for every bed: toward the top of the drawing, where each
+ * illustration puts its headboard and pillows (head end).
  */
-function bedLieSlot(offsetY: number): FurnitureInteractionSlot[] {
-  return [{ id: 'lie', kind: 'lie', offsetX: 0, offsetY, facing: -Math.PI / 2 }]
+function bedLieSlots(width: number, height: number, xFraction: number, yFraction: number): FurnitureInteractionSlot[] {
+  const offsetX = width * xFraction
+  const offsetY = height * (yFraction - 0.5)
+  return [
+    { id: 'lie', kind: 'lie', offsetX: -offsetX, offsetY, facing: -Math.PI / 2 },
+    { id: 'lie-right', kind: 'lie', offsetX, offsetY, facing: -Math.PI / 2 },
+  ]
+}
+
+/** One centered lie slot for beds that are intentionally single-occupant. */
+function singleBedLieSlot(height: number, yFraction: number): FurnitureInteractionSlot[] {
+  return [{ id: 'lie', kind: 'lie', offsetX: 0, offsetY: height * (yFraction - 0.5), facing: -Math.PI / 2 }]
 }
 
 /**
@@ -312,9 +335,12 @@ const RAW_CATALOG: RawDefinition[] = [
   },
 
   // ---- 침실
-  // BedBody's pillow block center (y=0.31h+0.17h/2=0.395h) minus local origin (0.5h) = -0.105h = -15.1 at h=144 — same for both, since pillow count doesn't shift the block's own Y.
-  piece('bed-single', '싱글 침대', 'bedroom', 144, 144, [0.85, 1.25], solid(0.9), 'floor', bedLieSlot(-15.1)),
-  piece('bed-double', '더블 침대', 'bedroom', 224, 144, [0.8, 1.2], solid(0.9), 'floor', bedLieSlot(-15.1)),
+  // Both are `BedBody` (BedroomIllustrations.tsx): mattress rect x 0.04w–0.96w, y 0.40h–0.74h, so its vertical center
+  // is 0.57h; the pillow row ends at 0.48h, so 0.57h is on the mattress just below it.
+  //  - bed-single: intentionally single-occupant; centered on its one wide pillow/mattress.
+  //  - bed-double: two pillows of width 0.385w whose centers are ±0.2075w from center — one sleeper per side.
+  piece('bed-single', '싱글 침대', 'bedroom', 144, 144, [0.85, 1.25], solid(0.9), 'floor', singleBedLieSlot(144, 0.57)),
+  piece('bed-double', '더블 침대', 'bedroom', 224, 144, [0.8, 1.2], solid(0.9), 'floor', bedLieSlots(224, 144, 0.2075, 0.57)),
   piece('nightstand', '협탁', 'bedroom', 64, 72, [0.75, 1.5], solid(0.6)),
   piece('vanity', '화장대', 'bedroom', 128, 160, [0.75, 1.2], solid(0.4)),
   piece('wardrobe', '옷장', 'bedroom', 128, 192, [0.75, 1.2], solid(0.25)),
@@ -384,10 +410,11 @@ const RAW_CATALOG: RawDefinition[] = [
   // Tabletop prop — collision:none like every other small decor item, but a real light source (see furnitureCatalog's `piece` `lightSource` param and CandleIllustration's own glow).
   piece('candle', '캔들', 'decor', 24, 36, [0.75, 2.2], NONE, 'floor', [], true),
 
-  // ---- 신규: 상호작용 가구 — 기존 소파/의자·테이블 상호작용 엔진을 그대로 재사용 (bedLieSlot / tableSideSlots / chairSeat), 새 엔진을 만들지 않는다.
-  // Pillow block center: see CanopyBedIllustration's own doc comment for the exact derivation (BedBody's fractions
-  // remapped into [0.34, 0.94]) — pillow center 0.5845h, offset from local origin (0.5h) = 0.0845h = 14.9 at h=176.
-  piece('canopy-bed', '캐노피 침대', 'bedroom', 168, 176, [0.8, 1.2], solid(0.35), 'floor', bedLieSlot(14.9)),
+  // ---- 신규: 상호작용 가구 — 기존 소파/의자·테이블 상호작용 엔진을 그대로 재사용 (bedLieSlots / tableSideSlots / chairSeat), 새 엔진을 만들지 않는다.
+  // CanopyBedIllustration: mattress rect x 0.04w–0.96w, y 0.588h–0.810h → vertical center 0.699h, below the pillow
+  // (y 0.529h–0.640h). This bed is intentionally single-occupant: its one lie slot is centered horizontally
+  // and moved to y=0.699h, the actual mattress center, instead of the old pillow-row position at 0.5845h.
+  piece('canopy-bed', '캐노피 침대', 'bedroom', 168, 176, [0.8, 1.2], solid(0.35), 'floor', singleBedLieSlot(176, 0.699)),
   piece('round-table', '원형 테이블', 'living', 140, 90, [0.75, 1.3], solid(0.65), 'floor', tableSideSlots(140)),
 
   // ---- 가구 종류 확장 (2차): 거실/침실/식사/작업/수납/조명/장식 전 영역

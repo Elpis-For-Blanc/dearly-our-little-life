@@ -35,6 +35,18 @@ describe('FloorEditor', () => {
     expect(activeFloor().baseColor.toLowerCase()).toBe('#efe3d0')
   })
 
+  it('offers the shared dark palette for both floor and pattern colors', async () => {
+    const user = userEvent.setup()
+    render(<FloorEditor />)
+
+    await user.click(screen.getByRole('button', { name: '바닥 색상 차콜' }))
+    expect(activeFloor().baseColor.toLowerCase()).toBe('#41434a')
+
+    await user.click(screen.getByRole('button', { name: /헤링본/ }))
+    await user.click(screen.getByRole('button', { name: '바닥 무늬 색상 와인' }))
+    expect(activeFloor().patternColor.toLowerCase()).toBe('#702c42')
+  })
+
   it('switches floor pattern by clicking a pattern swatch', async () => {
     const user = userEvent.setup()
     render(<FloorEditor />)

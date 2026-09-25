@@ -139,14 +139,16 @@ describe('가구 비주얼 2차 고도화: interactionSlots 오프셋은 이번 
     expect(table[0].offsetX).toBeCloseTo(-table[1].offsetX, 5)
   })
 
-  it('bed: lie 슬롯 오프셋 회귀 (getUsableLieSlots는 여전히 최대 1개만 반환)', () => {
+  it('bed: 두 lie 슬롯을 모두 사용할 수 있다', () => {
     const slots = getUsableLieSlots(getFurnitureDefinition('bed')!)
-    expect(slots).toHaveLength(1)
+    expect(slots).toHaveLength(2)
+    expect(slots.map((slot) => slot.id)).toEqual(['bed-left', 'bed-right'])
   })
 
-  it('canopy-bed: lie 슬롯 오프셋 회귀', () => {
+  it('canopy-bed: 1인용 lie 슬롯이 매트리스 중앙에 배치된다', () => {
     const slots = getUsableLieSlots(getFurnitureDefinition('canopy-bed')!)
     expect(slots).toHaveLength(1)
+    expect(slots[0].offsetX).toBe(0)
   })
 })
 
@@ -210,8 +212,9 @@ describe('가구 비주얼 2차 고도화: seat/lie/stand 실제 앉기·일어�
     expect(useCharacterMovementStore.getState().byId.a?.status).toBe('moving')
     expect(useCharacterMovementStore.getState().byId.a?.destination).not.toBeNull()
     expect(useFurnitureUsageStore.getState().byCharacterId.a).toBe('bed-1:bed-left')
-    // the bed's real second slot must never be independently reservable this phase (getUsableLieSlots caps to 1)
-    expect(startLyingDown('b', 'bed-1')).toBe('occupied')
+    // The second side remains independently reservable while the first is occupied.
+    expect(startLyingDown('b', 'bed-1')).toBe('started')
+    expect(useFurnitureUsageStore.getState().byCharacterId.b).toBe('bed-1:bed-right')
     standUp('a')
     expect(useFurnitureUsageStore.getState().byCharacterId.a).toBeUndefined()
   })

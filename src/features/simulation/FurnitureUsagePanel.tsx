@@ -112,7 +112,7 @@ export function FurnitureUsagePanel({ roomId, placementId, onClose }: FurnitureU
   if (!room || !placement) return null
   const definition = getFurnitureDefinition(placement.furnitureId)
   const sitSlots = getSitSlots(definition)
-  const lieSlots = getUsableLieSlots(definition) // capped to one, even for a bed with real two-pillow data — see its own doc comment
+  const lieSlots = getUsableLieSlots(definition) // a bed's two independent sides — see its own doc comment
   const standSlots = getStandSlots(definition)
   const kind: InteractionKind | null = sitSlots.length > 0 ? 'sit' : lieSlots.length > 0 ? 'lie' : standSlots.length > 0 ? 'stand' : null
   if (!definition || !kind) return null

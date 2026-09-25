@@ -1,9 +1,12 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useCharacterStore } from '../character/characterStore'
 import type { Character } from '../character/types'
 import { useDialogueStore } from '../dialogue/dialogueStore'
 import { useCharacterInteractionStore } from '../interaction/characterInteractionStore'
 import { describeInteractionStatus } from '../interaction/interactionStatusText'
+import { getFood } from '../food/foodCatalog'
+import { cancelMeal, startMeal, startSharedMeal } from '../food/mealEngine'
+import { useMealStore } from '../food/mealStore'
 import { deriveMood, MOOD_LABELS } from './moodEngine'
 import { createDefaultNeeds, NEED_CRITICAL_THRESHOLD } from './needsConfig'
 import { useNeedsStore } from './needsStore'
@@ -56,6 +59,9 @@ export function LiveNeedsPanel({ characters }: LiveNeedsPanelProps) {
   const activeConversations = useDialogueStore((state) => state.activeConversations)
   const interactionSessions = useCharacterInteractionStore((state) => state.sessions)
   const interactionByCharacterId = useCharacterInteractionStore((state) => state.byCharacterId)
+  const meals = useMealStore((state) => state.byCharacterId)
+  const [mealMessage, setMealMessage] = useState<Record<string, string>>({})
+  const [sharedMealMessage, setSharedMealMessage] = useState('')
 
   const nameById = useMemo(() => Object.fromEntries(allCharacters.map((c) => [c.id, c.name])), [allCharacters])
 
@@ -65,6 +71,12 @@ export function LiveNeedsPanel({ characters }: LiveNeedsPanelProps) {
 
   if (characters.length === 0) return null
 
+  const mealPairs = characters.flatMap((first, firstIndex) =>
+    characters.slice(firstIndex + 1).map((second) => ({ first, second })),
+  )
+  const mealOutcomeMessage = (outcome: ReturnType<typeof startSharedMeal>) =>
+    outcome === 'started' ? '' : outcome === 'no_table' ? '이 방에 식탁이 필요해요.' : outcome === 'full' ? '두 자리가 비어 있는 식탁이 필요해요.' : outcome === 'busy' ? '둘 중 한 명이 지금 다른 행동 중이에요.' : '같이 식사를 시작할 수 없어요.'
+
   return (
     <div className="live-needs-panel" aria-label="캐릭터 상태">
       {characters.map((character) => {
@@ -73,6 +85,18 @@ export function LiveNeedsPanel({ characters }: LiveNeedsPanelProps) {
         const needs = needsById[character.id] ?? createDefaultNeeds(() => 0.5)
         const mood = deriveMood(needs)
         const interactionStatus = describeInteractionStatus(character.id, nameById, activeConversations, interactionSessions, interactionByCharacterId)
+        const meal = meals[character.id]
+        const mealStatus = meal ? (meal.stage === 'eating' ? `${getFood(meal.foodId).emoji} ${getFood(meal.foodId).name} 먹는 중` : `${getFood(meal.foodId).emoji} 식사하러 가는 중`) : null
+        const handleMeal = () => {
+          if (meal) {
+            cancelMeal(character.id)
+            setMealMessage((current) => ({ ...current, [character.id]: '' }))
+            return
+          }
+          const outcome = startMeal(character.id)
+          const message = outcome === 'started' ? '' : outcome === 'no_table' ? '이 방에 식탁이 필요해요.' : outcome === 'full' ? '식탁 자리가 모두 사용 중이에요.' : outcome === 'busy' ? '지금은 다른 행동 중이에요.' : '식사를 시작할 수 없어요.'
+          setMealMessage((current) => ({ ...current, [character.id]: message }))
+        }
         return (
           <div key={character.id} className="live-needs-card">
             <div className="live-needs-card-header">
@@ -80,6 +104,7 @@ export function LiveNeedsPanel({ characters }: LiveNeedsPanelProps) {
               <span className="live-needs-card-mood">기분: {MOOD_LABELS[mood]}</span>
             </div>
             {interactionStatus && <p className="live-needs-card-interaction">{interactionStatus}</p>}
+            {mealStatus && <p className="live-needs-card-meal">{mealStatus}</p>}
             <div className="live-needs-gauges">
               {GAUGES.map((gauge) => {
                 const value = needs[gauge.key]
@@ -103,9 +128,31 @@ export function LiveNeedsPanel({ characters }: LiveNeedsPanelProps) {
                 )
               })}
             </div>
+            <div className="live-needs-meal-actions">
+              <button type="button" onClick={handleMeal}>
+                {meal ? '식사 취소' : '🍽️ 식사하기'}
+              </button>
+              {mealMessage[character.id] && <span>{mealMessage[character.id]}</span>}
+            </div>
           </div>
         )
       })}
+      {mealPairs.length > 0 && (
+        <div className="live-needs-shared-meals" aria-label="같이 식사하기">
+          {mealPairs.map(({ first, second }) => {
+            return (
+              <button
+                key={`${first.id}:${second.id}`}
+                type="button"
+                onClick={() => setSharedMealMessage(mealOutcomeMessage(startSharedMeal(first.id, second.id)))}
+              >
+                🍽️ {first.name} · {second.name} 같이 식사하기
+              </button>
+            )
+          })}
+          {sharedMealMessage && <span>{sharedMealMessage}</span>}
+        </div>
+      )}
     </div>
   )
 }

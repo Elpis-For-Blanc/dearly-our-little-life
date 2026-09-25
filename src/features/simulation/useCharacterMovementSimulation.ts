@@ -10,6 +10,7 @@ import { getActiveLiveRoom, useHomeStore } from '../home/homeStore'
 import type { Room } from '../home/roomTypes'
 import type { InteractionKind } from '../home/types'
 import { runNeedsPass } from '../needs/needsTrigger'
+import { runMealPass } from '../food/mealEngine'
 import { endActiveCharacterInteractionsFor, runCharacterInteractionPass } from '../interaction/characterInteractionTrigger'
 import { runAutoFurnitureUsePass } from './autoFurnitureUseTrigger'
 import { useCharacterMovementStore, type CharacterMovementState, type MovementStatus } from './characterMovementStore'
@@ -342,6 +343,8 @@ function tick(mountedRef: { current: boolean }, nearPairsRef: { current: Set<str
   // already excludes a character via isCharacterBusy) and before monologue (so monologue's activity derivation sees
   // this tick's freshest movement status — e.g. a character auto-seated just now doesn't get an 'idle'-only read).
   const now = Date.now()
+  // Meals get first claim on a hungry idle character before generic automatic furniture use.
+  runMealPass(now, hour)
   runAutoFurnitureUsePass(now)
 
   // Character-to-character interaction (stayTogether/sitTogether/hug/holdHands — see features/interaction/) runs

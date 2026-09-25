@@ -71,14 +71,13 @@ describe('autoFurnitureUseEngine (순수 함수)', () => {
       expect(collectAutoFurnitureCandidates([], {})).toEqual([])
     })
 
-    it('소파(2석)·의자(1석)·침대(1석, 2슬롯 중 1개만) 모두에서 kind별 후보를 모은다', () => {
+    it('소파(2석)·의자(1석)·침대(2석) 모두에서 kind별 후보를 모은다', () => {
       const furniture = [sofaPlacement('sofa-1'), chairPlacement('chair-1'), bedPlacement('bed-1')]
       const candidates = collectAutoFurnitureCandidates(furniture, {})
       const bySlot = new Set(candidates.map((c) => `${c.placementId}:${c.slotId}`))
-      expect(bySlot).toEqual(new Set(['sofa-1:sofa-left', 'sofa-1:sofa-right', 'chair-1:seat', 'bed-1:bed-left']))
-      // The bed's real second pillow slot (bed-right) is never offered — matches getUsableLieSlots' own cap, so an
-      // auto pick can never target something startLyingDown would refuse.
-      expect(candidates.some((c) => c.slotId === 'bed-right')).toBe(false)
+      expect(bySlot).toEqual(new Set(['sofa-1:sofa-left', 'sofa-1:sofa-right', 'chair-1:seat', 'bed-1:bed-left', 'bed-1:bed-right']))
+      // Bed availability is per slot: both sides are automatic-use candidates while free.
+      expect(candidates.some((c) => c.slotId === 'bed-right')).toBe(true)
       expect(candidates.find((c) => c.placementId === 'sofa-1' && c.slotId === 'sofa-left')?.kind).toBe('sit')
       expect(candidates.find((c) => c.placementId === 'bed-1')?.kind).toBe('lie')
     })

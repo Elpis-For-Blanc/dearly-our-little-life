@@ -217,10 +217,11 @@ export function WardrobeIllustration({ width: w, height: h, colorway, style }: P
  * existing bed. Every vertical fraction below is `BedBody`'s own fraction
  * linearly remapped from its original [0.02, 0.94] range into [0.34, 0.94]
  * (scale factor (0.94-0.34)/(0.94-0.02) ≈ 0.6522) — kept as a documented
- * derivation, not eyeballed, so `bedLieSlot`'s offset below can be read
- * directly off this same geometry the way every other slot in this catalog
- * already is. Single pillow (like `bed-single`), one usable `'lie'` slot,
- * via the exact same `bedLieSlot` helper every other bed uses.
+ * derivation, not eyeballed, so `bedLieSlots`' offsets can be read directly
+ * off this same geometry the way every other slot in this catalog already is
+ * (mattress rect y 0.588h–0.810h, x 0.04w–0.96w). Single wide pillow (like
+ * `bed-single`), two `'lie'` slots via the exact same `bedLieSlots` helper
+ * every other bed uses.
  */
 export function CanopyBedIllustration({ width: w, height: h, colorway, style }: Props) {
   const { headboard, frame, blanket, pillow } = resolvePartTones('canopy-bed', colorway, style)

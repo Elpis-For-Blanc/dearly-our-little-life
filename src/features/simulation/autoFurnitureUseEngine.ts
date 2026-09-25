@@ -53,7 +53,9 @@ export interface AutoFurnitureCandidate {
  * (`furnitureUsageTrigger.ts`) and `FurnitureUsagePanel.tsx` already use, so
  * a candidate here is always something `startSitting`/`startLyingDown`/
  * `startLingering` would actually accept — never a slot the manual path
- * would refuse (e.g. a bed's real-but-capped second pillow slot).
+ * would refuse. Availability is per *slot*, never per piece: a bed with one
+ * sleeper still offers its other side, and only stops being a candidate once
+ * both are taken.
  */
 export function collectAutoFurnitureCandidates(furniture: FurniturePlacement[], bySeatKey: Record<string, FurnitureUsageEntry>): AutoFurnitureCandidate[] {
   const candidates: AutoFurnitureCandidate[] = []

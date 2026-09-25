@@ -35,6 +35,18 @@ describe('WallpaperEditor', () => {
     expect(activeWallpaper().baseColor.toLowerCase()).toBe('#ded2f2')
   })
 
+  it('offers the shared dark palette for both wall and pattern colors', async () => {
+    const user = userEvent.setup()
+    render(<WallpaperEditor />)
+
+    await user.click(screen.getByRole('button', { name: '벽 색상 소프트 블랙' }))
+    expect(activeWallpaper().baseColor.toLowerCase()).toBe('#292929')
+
+    await user.click(screen.getByRole('button', { name: '도트' }))
+    await user.click(screen.getByRole('button', { name: '벽 무늬 색상 네이비' }))
+    expect(activeWallpaper().patternColor.toLowerCase()).toBe('#263653')
+  })
+
   it('does not show pattern-color/scale controls for the solid pattern, but does for others', async () => {
     const user = userEvent.setup()
     render(<WallpaperEditor />)

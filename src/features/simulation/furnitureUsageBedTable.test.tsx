@@ -169,19 +169,20 @@ describe('furniture interaction (phase 3): bed (눕기) and table (머무르기)
       expect(positions.size).toBeGreaterThan(1)
     })
 
-    it('침대 사용 중 중복 요청 차단: a second character cannot lie down on an already-occupied bed', () => {
-      useCharacterStore.setState({ characters: [character('a'), character('b')] })
-      useCharacterMovementStore.setState({ byId: { a: movementEntry('a', 300, 300, roomId), b: movementEntry('b', 310, 300, roomId) } })
+    it('침대는 두 캐릭터가 서로 다른 lie 슬롯을 독립적으로 사용할 수 있고 세 번째 요청만 차단한다', () => {
+      useCharacterStore.setState({ characters: [character('a'), character('b'), character('c')] })
+      useCharacterMovementStore.setState({ byId: { a: movementEntry('a', 300, 300, roomId), b: movementEntry('b', 310, 300, roomId), c: movementEntry('c', 320, 300, roomId) } })
       expect(startLyingDown('a', 'bed-1')).toBe('started')
-      expect(startLyingDown('b', 'bed-1')).toBe('occupied')
+      expect(startLyingDown('b', 'bed-1')).toBe('started')
       expect(useFurnitureUsageStore.getState().bySeatKey['bed-1:bed-left'].characterId).toBe('a')
-      expect(useCharacterMovementStore.getState().byId.b.status).toBe('idle') // untouched
+      expect(useFurnitureUsageStore.getState().bySeatKey['bed-1:bed-right'].characterId).toBe('b')
+      expect(startLyingDown('c', 'bed-1')).toBe('occupied')
+      expect(useCharacterMovementStore.getState().byId.c.status).toBe('idle')
     })
 
-    it('한 캐릭터가 눕는 기능만 구현됨: the bed exposes exactly one usable lie slot even though its data has two (bed-left/bed-right), so a second simultaneous occupant is never possible regardless of which slot might be free', () => {
-      expect(BED.interactionSlots.filter((s) => s.kind === 'lie')).toHaveLength(2) // real data, both derived from pillow centers
+    it('침대의 두 lie 슬롯이 모두 사용 가능하며 primary는 기존 왼쪽 슬롯을 유지한다', () => {
+      expect(BED.interactionSlots.filter((s) => s.kind === 'lie')).toHaveLength(2)
       expect(getStandSlots(BED)).toHaveLength(0)
-      // getPrimaryLieSlot only ever returns the first — startLyingDown never accepts a slotId at all, so the second slot is structurally unreachable this phase.
       expect(getPrimaryLieSlot(BED)?.id).toBe('bed-left')
     })
 

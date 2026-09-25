@@ -2,9 +2,13 @@ import { useState, type CSSProperties } from 'react'
 import { computeCharacterDisplayGeometry } from '../character/characterDisplay'
 import type { Character } from '../character/types'
 import { useDialogueStore } from '../dialogue/dialogueStore'
+import { getFurnitureDefinition, getFurnitureSize } from '../home/furnitureCatalog'
+import { useHomeStore } from '../home/homeStore'
 import { MONOLOGUE_DISPLAY_MS } from '../dialogue/monologueConfig'
 import { useMonologueStore } from '../dialogue/monologueStore'
 import { ROOM_HEIGHT, ROOM_WIDTH } from '../home/roomLayout'
+import { getFood } from '../food/foodCatalog'
+import { useMealStore } from '../food/mealStore'
 import { useCharacterMovementStore } from './characterMovementStore'
 import { BASE_CHARACTER_HEIGHT, SHADOW_HEIGHT_RATIO, SHADOW_WIDTH_RATIO } from './characterRenderConfig'
 import './CharacterToken.css'
@@ -32,6 +36,12 @@ export function CharacterToken({ character }: CharacterTokenProps) {
   const movement = useCharacterMovementStore((state) => state.byId[character.id])
   const bubbleText = useDialogueStore((state) => state.activeBubbleByCharacter[character.id])
   const monologue = useMonologueStore((state) => state.activeByCharacter[character.id])
+  const meal = useMealStore((state) => state.byCharacterId[character.id])
+  const mealTable = useHomeStore((state) => {
+    if (!meal) return undefined
+    const room = state.rooms.find((item) => item.id === movement?.roomId)
+    return room?.furniture.find((placement) => placement.id === meal.placementId)
+  })
   const [imageFailed, setImageFailed] = useState(false)
 
   if (!movement) return null
@@ -76,6 +86,31 @@ export function CharacterToken({ character }: CharacterTokenProps) {
     top: `${(bubbleOffsetUnits / ROOM_HEIGHT) * 100}%`,
   }
 
+  // The meal marker is rendered inside the character token for convenient lifecycle
+  // ownership, but its *position* belongs to the dining table.  Derive an absolute
+  // tabletop point from the table illustration geometry instead of interpolating
+  // between the diner and the placement centre: that old interpolation could land
+  // below the tabletop (especially when the diner was standing beside a tall table).
+  //
+  // DiningTableBody draws its top at 6% of the SVG height with 20% visual depth.
+  // A point around 17% therefore sits safely inside the visible top surface.  The
+  // left/right meal slots get their own half of the top so two meals do not overlap.
+  const mealStyle: CSSProperties | undefined = (() => {
+    if (meal?.stage !== 'eating' || !mealTable) return undefined
+    const definition = getFurnitureDefinition(mealTable.furnitureId)
+    if (!definition) return undefined
+    const size = getFurnitureSize(definition, mealTable.variant)
+    const scaledWidth = size.width * mealTable.scale
+    const scaledHeight = size.height * mealTable.scale
+    const side = meal.slotId === 'table-right' ? 1 : -1
+    const plateX = mealTable.x + side * scaledWidth * 0.23
+    const plateY = mealTable.y - scaledHeight * 0.33
+    return {
+      left: `${((plateX - movement.x) / ROOM_WIDTH) * 100}%`,
+      top: `${((plateY - movement.y) / ROOM_HEIGHT) * 100}%`,
+    }
+  })()
+
   return (
     <div className={`character-token character-token-${movement.status}`} style={wrapperStyle}>
       <div className="character-token-shadow" style={shadowStyle} />
@@ -93,6 +128,12 @@ export function CharacterToken({ character }: CharacterTokenProps) {
         </div>
       )}
       <span className="character-token-name">{character.name}</span>
+      {meal?.stage === 'eating' && mealStyle && (
+        <span className="character-token-meal" style={mealStyle} aria-label={`${getFood(meal.foodId).name} 먹는 중`}>
+          <span className="character-token-meal-plate" aria-hidden="true" />
+          <span className="character-token-meal-food">{getFood(meal.foodId).emoji}</span>
+        </span>
+      )}
       {bubbleText ? (
         <div className="character-token-bubble" style={bubbleStyle}>
           {bubbleText}

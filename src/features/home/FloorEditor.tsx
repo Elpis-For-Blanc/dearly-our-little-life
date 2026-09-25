@@ -1,4 +1,5 @@
 import { ColorSwatchPicker } from './ColorSwatchPicker'
+import { FURNITURE_COLOR_GROUPS } from './colorPresets'
 import { getActiveDecorateRoom, useHomeStore } from './homeStore'
 import { getFloorPatternContent } from './patterns/floorPatterns'
 import { FLOOR_PATTERN_LABELS, FLOOR_PATTERN_ORDER } from './roomSurface'
@@ -13,7 +14,7 @@ export function FloorEditor() {
   return (
     <div className="surface-editor">
       <h3>바닥 색상</h3>
-      <ColorSwatchPicker value={floor.baseColor} onChange={(hex) => setFloor({ baseColor: hex })} />
+      <ColorSwatchPicker value={floor.baseColor} onChange={(hex) => setFloor({ baseColor: hex })} groups={FURNITURE_COLOR_GROUPS} label="바닥 색상" />
 
       <h3>패턴</h3>
       <div className="pattern-grid">
@@ -37,7 +38,7 @@ export function FloorEditor() {
       {floor.pattern !== 'solid' && (
         <>
           <h3>무늬 색상</h3>
-          <ColorSwatchPicker value={floor.patternColor} onChange={(hex) => setFloor({ patternColor: hex })} />
+          <ColorSwatchPicker value={floor.patternColor} onChange={(hex) => setFloor({ patternColor: hex })} groups={FURNITURE_COLOR_GROUPS} label="바닥 무늬 색상" />
 
           <label className="surface-editor-field">
             <span>패턴 크기 ({Math.round(floor.patternScale * 100)}%)</span>

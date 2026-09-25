@@ -18,6 +18,7 @@ import { CharacterInteractionPanel } from '../features/interaction/CharacterInte
 import { getRoomLightingStyle } from '../features/lighting/roomLightingEngine'
 import { useRoomLightingSettingsStore } from '../features/lighting/roomLightingSettingsStore'
 import { LiveNeedsPanel } from '../features/needs/LiveNeedsPanel'
+import { PhotoMode } from '../features/photo/PhotoMode'
 import { useAutoFurnitureUseSettingsStore } from '../features/simulation/autoFurnitureUseSettingsStore'
 import { LiveRoomView } from '../features/simulation/LiveRoomView'
 import { useCharacterMovementStore } from '../features/simulation/characterMovementStore'
@@ -68,6 +69,7 @@ export function LiveScreen() {
   const [place, setPlace] = useState('거실')
   const [actionA, setActionA] = useState('')
   const [actionB, setActionB] = useState('')
+  const [photoModeOpen, setPhotoModeOpen] = useState(false)
 
   const pairs = useMemo(() => {
     const result: Array<{ idA: string; idB: string; label: string }> = []
@@ -158,8 +160,12 @@ export function LiveScreen() {
 
   return (
     <section className="live-screen">
-      <RoomTabs activeRoomId={activeLiveRoomId} onSelectRoom={setActiveLiveRoom} />
+      <div className="live-room-toolbar">
+        <RoomTabs activeRoomId={activeLiveRoomId} onSelectRoom={setActiveLiveRoom} />
+        <button type="button" className="live-photo-button" onClick={() => setPhotoModeOpen(true)}>📷 스크린샷</button>
+      </div>
       <LiveRoomView />
+      {photoModeOpen && <PhotoMode onClose={() => setPhotoModeOpen(false)} />}
       <LiveNeedsPanel characters={roomCharacters} />
 
       <div className="live-frequency-panel">
